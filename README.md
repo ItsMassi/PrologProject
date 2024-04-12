@@ -26,6 +26,7 @@ Mode > Classic) y sin autocompletado de cruces (Settings > Auto-Crosses > deshab
 ![image](https://github.com/ItsMassi/PrologProject/assets/90329965/1146ec27-01e2-40d9-b4dd-061cc645f7c5)
 
 A continuación se listan requerimientos más específicos:
+
 ● Presentar al jugador una grilla interactiva (con celdas clickeables) con las pistas a los
 costados, donde es posible que inicialmente ciertas celdas ya estén pintadas o
 marcadas como espacios. Esta grilla inicial se especificará en Prolog, como se explicará
@@ -86,6 +87,7 @@ init/3,
 contrario.
 
 Observaciones:
+
 ● En caso de que Contenido ("#" o "X") coincida con el valor en la celda en Pos,
 entonces deberá borrarse, esto es, cambiarse por _ (variable sin instanciar). Esto es, la
 lógica de borrar cuando se marca con lo que ya había queda del lado de Prolog.
@@ -99,6 +101,7 @@ Se deberá realizar un informe que explique claramente la implementación en Pro
 realizada.
 Además, deberá incluirse una sección con casos de test significativos (capturas de pantalla).
 El informe debe ser:
+
 ● Claro: información bien estructurada y presentada
 ● Completo: explicando cómo resolvieron cada requerimiento funcional (la parte de
 Prolog, y a nivel de estrategia, no a nivel de código), funcionalidades extra
