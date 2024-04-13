@@ -4,7 +4,7 @@
 	]).
 
 :-use_module(library(lists)).
-
+:- use_module(library(clpfd)). %This library helps with the management of lists and columns
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
 % replace(?X, +XIndex, +Y, +Xs, -XsY)
@@ -35,3 +35,29 @@ put(Content, [RowN, ColN], _RowsClues, _ColsClues, Grid, NewGrid, 0, 0):-
 	Cell == Content
 		;
 	replace(_Cell, ColN, Content, Row, NewRow)).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%check a row of characters against a list of clues, incrementing a counter for each "#" character
+%and resetting it when encountering an "X" or "_" character, depending on the match of the current clue and counter.
+
+check([], [Clue|Clues], Counter):- % Base case
+    ((Counter =:= Clue, Clues = []) ->
+        writeln('List Correctly checked'),
+        true
+    ;
+    writeln('List Not Correctly checked'),    
+    fail % fails
+    )
+    . % Base case: empty lists
+
+check(["X"|Rs], [Clue|Clues], Counter):-% Works for "X" or "_"
+    (Counter =:= Clue ->
+        check(Rs, Clues, 0) % Reset counter and continue with the rest of the lists
+    ;
+        check(Rs, [Clue|Clues], Counter) % Continue without resetting the counter
+    ).
+
+check(["#"|Rs], [Clue|Clues], Counter):-
+    NewCounter is Counter + 1,
+    check(Rs, [Clue|Clues], NewCounter). % Increment counter and continue
