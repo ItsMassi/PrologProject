@@ -14,6 +14,7 @@ function Game() {
   const [painting, setPainting] = useState(false);
 
 
+
   useEffect(() => {
     // Creation of the pengine server instance.    
     // This is executed just once, after the first render.    
@@ -49,6 +50,13 @@ function handleClick(i, j) {
     pengine.query(queryS, (success, response) => {
       if (success) {
         setGrid(response['ResGrid']);
+        const newRowsClue=[...rowCluesSat];
+        const newColsClue=[...colClueSat];
+        newRowsClue[i]=response['RowSat']== 0? false: true;
+        newColsClue[j]=response['ColSat'] == 0? false: true;
+        setRowsClues(newRowsClue);
+        setColsClues(newColsClue);
+      
       }
       setWaiting(false);
     });
