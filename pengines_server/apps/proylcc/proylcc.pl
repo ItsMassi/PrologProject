@@ -41,17 +41,26 @@ put(Content, [RowN, ColN], _RowsClues, _ColsClues, Grid, NewGrid, 0, 0):-
 %check a row of characters against a list of clues, incrementing a counter for each "#" character
 %and resetting it when encountering an "X" or "_" character, depending on the match of the current clue and counter.
 
-check([], [Clue|Clues], Counter):- % Base case
-    ((Counter =:= Clue, Clues = []) ->
+check([], [Clue|Clues], Counter):- 
+    ((Counter =:= Clue, Clues = []) -> %if we empited the clues and also the counter is equal to the clue
         writeln('List Correctly checked'),
         true
     ;
-    writeln('List Not Correctly checked'),    
-    fail % fails
+    	writeln('List has errors'),    
+    	fail % fails
     )
     . % Base case: empty lists
 
-check(["X"|Rs], [Clue|Clues], Counter):-% Works for "X" or "_"
+check(_,[],_):-true.%Base case, f we run out of clues we finished
+
+check(["X"|Rs], [Clue|Clues], Counter):-% Works for "X"
+    (Counter =:= Clue ->
+        check(Rs, Clues, 0) % Reset counter and continue with the rest of the lists
+    ;
+        check(Rs, [Clue|Clues], Counter) % Continue without resetting the counter
+    ).
+
+check(["_"|Rs], [Clue|Clues], Counter):-% Works for "_"
     (Counter =:= Clue ->
         check(Rs, Clues, 0) % Reset counter and continue with the rest of the lists
     ;
@@ -61,3 +70,15 @@ check(["X"|Rs], [Clue|Clues], Counter):-% Works for "X" or "_"
 check(["#"|Rs], [Clue|Clues], Counter):-
     NewCounter is Counter + 1,
     check(Rs, [Clue|Clues], NewCounter). % Increment counter and continue
+
+% CheckClues Checks if the clues of certain Row and Column are complete
+checkClues([R|Rs],RowNum, ColumnNum,RClues, CClues):-
+    % The grid is given in a list of Rows form, so we transpose it to get the columns
+    transpose([R|Rs],[C|Cs]),% We get the columns
+    nth0(RowNum, [R|Rs], Row), nth0(RowNum, RClues, RClue),
+    nth0(ColumnNum, [C|Cs], Column), nth0(ColumnNum, CClues, CClue),
+    ((check(Row, RClue, 0),check(Column,CClue,0))->  true; false)
+    .
+    
+    
+    
