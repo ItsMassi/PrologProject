@@ -12,6 +12,8 @@ function Game() {
   const [colsClues, setColsClues] = useState(null);
   const [waiting, setWaiting] = useState(false);
   const [painting, setPainting] = useState(false);
+  const [rowClueSat, setRowsClueSat] = useState([]); // Initialize as an empty array
+  const [colClueSat, setColClueSat] = useState([])
 
 
 
@@ -50,13 +52,15 @@ function handleClick(i, j) {
     pengine.query(queryS, (success, response) => {
       if (success) {
         setGrid(response['ResGrid']);
-        const newRowsClue=[...rowCluesSat];
+        const newRowsClue=[...rowClueSat];
         const newColsClue=[...colClueSat];
-        newRowsClue[i]=response['RowSat']== 0? false: true;
-        newColsClue[j]=response['ColSat'] == 0? false: true;
-        setRowsClues(newRowsClue);
-        setColsClues(newColsClue);
-      
+        newRowsClue[i]=response['RowSat']=== 0? false: true;
+        newColsClue[j]=response['ColSat'] === 0? false: true;
+        setRowsClueSat(newRowsClue);
+        setColClueSat(newColsClue);
+        console.log(response);
+        console.log(response['ResGrid']);
+       
       }
       setWaiting(false);
     });
