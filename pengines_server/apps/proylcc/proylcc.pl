@@ -23,7 +23,7 @@ replace(X, XIndex, Y, [Xi|Xs], [Xi|XsY]):-
 % put(+Content, +Pos, +RowsClues, +ColsClues, +Grid, -NewGrid, -RowSat, -ColSat).
 %
 
-put(Content, [RowN, ColN], _RowsClues, _ColsClues, Grid, NewGrid, RowSat, ColSat):-
+put(Content, [RowN, ColN], RowsClues, ColsClues, Grid, NewGrid, RowSat, ColSat):-
 	% NewGrid is the result of replacing the row Row in position RowN of Grid by a new row NewRow (not yet instantiated).
 	replace(Row, RowN, NewRow, Grid, NewGrid),
 
@@ -34,7 +34,8 @@ put(Content, [RowN, ColN], _RowsClues, _ColsClues, Grid, NewGrid, RowSat, ColSat
 	(replace(Cell, ColN, _, Row, NewRow),
 	Cell == Content
 		;
-	replace(_Cell, ColN, Content, Row, NewRow))
+	replace(_Cell, ColN, Content, Row, NewRow)),
+    checkClues(Grid,RowN,ColN,RowsClues,ColsClues,RowSat, ColSat)
     .
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
