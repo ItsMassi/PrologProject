@@ -48,11 +48,15 @@ put(Content, [RowN, ColN], RowsClues, ColsClues, Grid, NewGrid, RowSat, ColSat):
 
 % Base case: If the list is empty and there are no more clues, the list is correctly checked.
 check([], [], _).
+check([], [Counter], Counter).
 
 % Case for "X": If the counter matches the current clue, reset the counter and continue checking the rest of the list.
 check(["X"|Rs], [Clue|Clues], Counter):-
-    Counter =:= Clue,
-    check(Rs, Clues, 0).
+    (Counter =:= Clue ->
+        check(Rs, Clues, 0)
+    ;
+        !, fail % Cut here to prevent backtracking if Counter =:= Clue is false
+    ).
 
 % Case for "#": Increment the counter and continue checking the rest of the list.
 check(["#"|Rs], [Clue|Clues], Counter):-
