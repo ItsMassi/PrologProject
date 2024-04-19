@@ -23,7 +23,7 @@ replace(X, XIndex, Y, [Xi|Xs], [Xi|XsY]):-
 % put(+Content, +Pos, +RowsClues, +ColsClues, +Grid, -NewGrid, -RowSat, -ColSat).
 %
 
-put(Content, [RowN, ColN], _RowsClues, _ColsClues, Grid, NewGrid, 0, 0):-
+put(Content, [RowN, ColN], _RowsClues, _ColsClues, Grid, NewGrid, RowSat, ColSat):-
 	% NewGrid is the result of replacing the row Row in position RowN of Grid by a new row NewRow (not yet instantiated).
 	replace(Row, RowN, NewRow, Grid, NewGrid),
 
@@ -34,7 +34,8 @@ put(Content, [RowN, ColN], _RowsClues, _ColsClues, Grid, NewGrid, 0, 0):-
 	(replace(Cell, ColN, _, Row, NewRow),
 	Cell == Content
 		;
-	replace(_Cell, ColN, Content, Row, NewRow)).
+	replace(_Cell, ColN, Content, Row, NewRow))
+    .
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -72,12 +73,14 @@ check(["#"|Rs], [Clue|Clues], Counter):-
     check(Rs, [Clue|Clues], NewCounter). % Increment counter and continue
 
 % CheckClues Checks if the clues of certain Row and Column are complete
-checkClues([R|Rs],RowNum, ColumnNum,RClues, CClues):-
+checkClues([R|Rs],RowNum, ColumnNum,RClues, CClues,RowSat,ColSat):-
     % The grid is given in a list of Rows form, so we transpose it to get the columns
     transpose([R|Rs],[C|Cs]),% We get the columns
     nth0(RowNum, [R|Rs], Row), nth0(RowNum, RClues, RClue),
     nth0(ColumnNum, [C|Cs], Column), nth0(ColumnNum, CClues, CClue),
-    ((check(Row, RClue, 0),check(Column,CClue,0))->  true; false)
+    check(Row, RClue, 0)-> RowSat is 1,
+    check(Column,CClue,0)->  ColSat is 1
+    %((check(Row, RClue, 0),check(Column,CClue,0))->  true; false)
     .
     
     
