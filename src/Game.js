@@ -64,7 +64,12 @@ function Game() {
       />
       <div className="game-info">
         {statusText}
+        <input type="checkbox" id="checkboxInput"></input>
+        <label for="checkboxInput" class="toggleSwitch" >
+        </label>
+
       </div>
+
     </div>
   );
 }
