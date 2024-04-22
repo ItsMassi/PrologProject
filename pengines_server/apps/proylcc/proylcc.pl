@@ -47,7 +47,7 @@ put(Content, [RowN, ColN], RowsClues, ColsClues, Grid, NewGrid, RowSat, ColSat):
 %and resetting it when encountering an "X" or "_" character, depending on the match of the current clue and counter.
 
 % Base case: If the list is empty and there are no more clues, the list is correctly checked.
-check([], [], _).
+check(_, [], _).
 check([], [Counter], Counter).
 
 % Case for "X": If the counter matches the current clue, reset the counter and continue checking the rest of the list.
@@ -55,12 +55,12 @@ check(["X"|Rs], [Clue|Clues], Counter):-
     (Counter =:= Clue ->
         check(Rs, Clues, 0)
     ;
-        !, fail % Cut here to prevent backtracking if Counter =:= Clue is false
+        check(Rs, [Clue|Clues], Counter)
     ).
 
 % Case for "#": Increment the counter and continue checking the rest of the list.
 check(["#"|Rs], [Clue|Clues], Counter):-
-    NewCounter is Counter + 1,
+    NewCounter is Counter + 1,!,
     check(Rs, [Clue|Clues], NewCounter).
 
 % Case for "_": Reset the counter and continue checking the rest of the list.
