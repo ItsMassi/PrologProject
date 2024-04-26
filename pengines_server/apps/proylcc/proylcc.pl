@@ -3,7 +3,7 @@
 		put/8
 	]).
 
-:-use_module(library(lists)).
+    :-use_module(library(lists)).
 :- use_module(library(clpfd)). %This library helps with the management of lists and columns
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
@@ -37,8 +37,9 @@ put(Content, [RowN, ColN], RowsClues, ColsClues, Grid, NewGrid, RowSat, ColSat):
 	replace(_Cell, ColN, Content, Row, NewRow)),
 
 
-    copy_term(NewGrid,GridCopy), % This is for not instantiating the annonymous variables
-    checkClues(GridCopy,RowN,ColN,RowsClues,ColsClues,RowSat, ColSat)
+    %copy_term(NewGrid,GridCopy), % This is for not instantiating the annonymous variables
+    %checkClues(GridCopy,RowN,ColN,RowsClues,ColsClues,RowSat, ColSat)
+    checkClues(NewGrid,RowN,ColN,RowsClues,ColsClues,RowSat, ColSat)
     .
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -48,10 +49,13 @@ put(Content, [RowN, ColN], RowsClues, ColsClues, Grid, NewGrid, RowSat, ColSat):
 
 % Base case: If the list is empty and there are no more clues, the list is correctly checked.
 check(_, [], _).
-check([], [Counter], Counter).
+check([], [Clue], Counter):-!,
+    Clue=:=Counter
+    .
 
-% Case for "X": If the counter matches the current clue, reset the counter and continue checking the rest of the list.
-check(["X"|Rs], [Clue|Clues], Counter):-
+% Case for "X" or _ : If the counter matches the current clue, reset the counter and continue checking the rest of the list.
+check([R|Rs], [Clue|Clues], Counter):-
+    (R=="X"; var(R)),!, 
     (Counter =:= Clue ->
         check(Rs, Clues, 0)
     ;
@@ -59,13 +63,10 @@ check(["X"|Rs], [Clue|Clues], Counter):-
     ).
 
 % Case for "#": Increment the counter and continue checking the rest of the list.
-check(["#"|Rs], [Clue|Clues], Counter):-
-    NewCounter is Counter + 1,!,
+check([R|Rs], [Clue|Clues], Counter):-
+    R=="#",!,
+    NewCounter is Counter + 1,
     check(Rs, [Clue|Clues], NewCounter).
-
-% Case for "_": Reset the counter and continue checking the rest of the list.
-check(["_"|Rs], [Clue|Clues], _):-
-    check(Rs, [Clue|Clues], 0).
 
 % CheckClues Checks if the clues of certain Row and Column are complete
 checkClues([R|Rs],RowNum, ColumnNum,RClues, CClues,RowSat,ColSat):-
@@ -73,9 +74,5 @@ checkClues([R|Rs],RowNum, ColumnNum,RClues, CClues,RowSat,ColSat):-
     nth0(RowNum, [R|Rs], Row), nth0(RowNum, RClues, RClue),
     nth0(ColumnNum, [C|Cs], Column), nth0(ColumnNum, CClues, CClue),
     (check(Row, RClue, 0) -> RowSat is 1 ; RowSat is 0), % If row check is correct, RowSat is 1, otherwise 0
-    (check(Column,CClue,0) -> ColSat is 1 ; ColSat is 0). % If column check is correct, ColSat is 1, otherwise 0
-    
-copyList(L,R) :- copyListAccumulator(L,R).
-copyListAccumulator([],[]).
-copyListAccumulator([H|T1],[H|T2]) :- copyListAccumulator(T1,T2).    
+    (check(Column,CClue,0) -> ColSat is 1 ; ColSat is 0). % If column check is correct, ColSat is 1, otherwise 0  
     
