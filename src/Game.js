@@ -12,8 +12,8 @@ function Game() {
   const [colsClues, setColsClues] = useState(null);
   const [waiting, setWaiting] = useState(false);
   const [painting, setPainting] = useState(false);
-  const [rowClueSat, setRowsClueSat] = useState([]); // Initialize as an empty array
-  const [colClueSat, setColClueSat] = useState([])
+  const [rowClueSat, setRowsClueSat] = useState(null); // Initialize as an empty array
+  const [colClueSat, setColClueSat] = useState(null);
 
 
 
@@ -32,6 +32,9 @@ function Game() {
         setGrid(response['Grid']);
         setRowsClues(response['RowClues']);
         setColsClues(response['ColumClues']);
+        setRowsClueSat(new Array (response['RowClues'].length).fill(false));
+        setColClueSat(new Array (response['ColumClues'].length).fill(false));
+
       }
     });
   }
@@ -78,6 +81,8 @@ function handleClick(i, j) {
         grid={grid}
         rowsClues={rowsClues}
         colsClues={colsClues}
+        rowClueSat={rowClueSat}
+        colClueSat={colClueSat}
         onClick={(i, j) => handleClick(i, j)}
       />
       <div className="game-info">

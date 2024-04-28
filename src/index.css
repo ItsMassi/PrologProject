@@ -1,11 +1,14 @@
-* {
+** {
   box-sizing: border-box;
 }
 
 body {
+  background: rgb(238,174,202);
+  background: radial-gradient(circle, rgba(238,174,202,1) 0%, rgba(148,187,233,1) 100%);
   font-family: sans-serif;
   margin: 20px;
   padding: 0;
+  
 }
 
 .square {
@@ -20,6 +23,7 @@ body {
 }
 
 .board {
+  
   display: grid;
 }
 
@@ -28,6 +32,7 @@ body {
 }
 
 .vertical {
+  
   display: flex;
   flex-direction: column;
 }
@@ -40,6 +45,7 @@ body {
   display: grid;
 }
 
+
 .clue {
   display: flex;
   justify-content: center;
@@ -47,19 +53,30 @@ body {
   background: #b9d6e0;
   border-radius: 8px;
   margin: 5px;
+
 }
 
-.clue div {
-  margin: 2px
+.satClue  {
+  margin: 2px;
+  opacity:0.5;
+  
 }
+.unsatClue  {
+  margin: 2px;
+  opacity: 1;
+  
+}
+
 
 .colClues .clue {
   flex-direction: column;
 }
 
 .game {
+  justify-content: center; /* Centrado horizontal */
+  align-items: center;
   display: flex;
-  flex-direction: row;
+  
 }
 /* To hide the checkbox */
 #checkboxInput {

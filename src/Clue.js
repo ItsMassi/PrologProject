@@ -1,10 +1,10 @@
 import React from 'react';
 
-function Clue({ clue }) {
+function Clue({ clue ,satClue}) {
     return (
         <div className={"clue"} >
             {clue.map((num, i) =>
-                <div key={i}>
+                <div className={satClue? "satClue": "unsatClue"} key={i}>
                     {num}
                 </div>
             )}
