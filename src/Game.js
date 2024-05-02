@@ -14,7 +14,7 @@ function Game() {
   const [painting, setPainting] = useState(false);
   const [rowClueSat, setRowsClueSat] = useState(null); // Initialize as an empty array
   const [colClueSat, setColClueSat] = useState(null);
-
+  const [winningMessage, setWinningMessage] = useState('');
 
 
   useEffect(() => {
@@ -63,7 +63,14 @@ function handleClick(i, j) {
         setColClueSat(newColsClue);
         console.log(response);
         console.log(response['ResGrid']);
-       
+
+        const allRowsSatisfied = newRowsClue.every(clue => clue === true);
+        const allColsSatisfied = newColsClue.every(clue => clue === true);
+
+        if (allRowsSatisfied && allColsSatisfied) {
+          setWinningMessage('You won!');
+        }
+
       }
       setWaiting(false);
     });
@@ -77,26 +84,24 @@ function handleClick(i, j) {
   const statusText = 'Keep playing!';
   return (
     <div className="game">
-      <Board
-        grid={grid}
-        rowsClues={rowsClues}
-        colsClues={colsClues}
-        rowClueSat={rowClueSat}
-        colClueSat={colClueSat}
-        onClick={(i, j) => handleClick(i, j)}
-      />
-      <div className="game-info">
-        {statusText}
-        <div>
-        <input type="checkbox" id="checkboxInput" value={painting} onChange={e => setPainting(e.target.checked)}/>
-        <label for="checkboxInput" class="toggleSwitch" >
-        </label>
-        </div>
-
-      </div>
-
+       <Board
+         grid={grid}
+         rowsClues={rowsClues}
+         colsClues={colsClues}
+         rowClueSat={rowClueSat}
+         colClueSat={colClueSat}
+         onClick={(i, j) => handleClick(i, j)}
+       />
+       <div className="game-info">
+         {statusText}
+         {winningMessage && <div>{winningMessage}</div>}
+         <div>
+           <input type="checkbox" id="checkboxInput" value={painting} onChange={e => setPainting(e.target.checked)}/>
+           <label for="checkboxInput" class="toggleSwitch"></label>
+         </div>
+       </div>
     </div>
-  );
+   );
 
 }
 export default Game;
