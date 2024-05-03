@@ -35,10 +35,6 @@ put(Content, [RowN, ColN], RowsClues, ColsClues, Grid, NewGrid, RowSat, ColSat):
 	Cell == Content
 		;
 	replace(_Cell, ColN, Content, Row, NewRow)),
-
-
-    %copy_term(NewGrid,GridCopy), % This is for not instantiating the annonymous variables
-    %checkClues(GridCopy,RowN,ColN,RowsClues,ColsClues,RowSat, ColSat)
     checkClues(NewGrid,RowN,ColN,RowsClues,ColsClues,RowSat, ColSat)
     .
 
@@ -69,9 +65,9 @@ check([R|Rs], [Clue|Clues], Counter):-
     check(Rs, [Clue|Clues], NewCounter).
 
 % CheckClues Checks if the clues of certain Row and Column are complete
-checkClues([R|Rs],RowNum, ColumnNum,RClues, CClues,RowSat,ColSat):-
-    transpose([R|Rs],[C|Cs]),
-    nth0(RowNum, [R|Rs], Row), nth0(RowNum, RClues, RClue),
+checkClues([G|Gs],RowNum, ColumnNum,RClues, CClues,RowSat,ColSat):-
+    transpose([G|Gs],[C|Cs]),
+    nth0(RowNum, [G|Gs], Row), nth0(RowNum, RClues, RClue),
     nth0(ColumnNum, [C|Cs], Column), nth0(ColumnNum, CClues, CClue),
     (check(Row, RClue, 0) -> RowSat is 1 ; RowSat is 0), % If row check is correct, RowSat is 1, otherwise 0
     (check(Column,CClue,0) -> ColSat is 1 ; ColSat is 0). % If column check is correct, ColSat is 1, otherwise 0  
