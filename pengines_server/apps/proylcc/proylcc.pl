@@ -55,7 +55,7 @@ check([R|Rs], [Clue|Clues], Counter):-
     (Counter =:= Clue ->
         check(Rs, Clues, 0)
     ;
-        check(Rs, [Clue|Clues], 0)
+    (Counter > 0 -> !, fail ; check(Rs, [Clue|Clues], Counter))
     ).
 
 % Case for "#": Increment the counter and continue checking the rest of the list.
